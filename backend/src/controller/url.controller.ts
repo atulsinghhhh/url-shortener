@@ -2,11 +2,11 @@ import { redis } from "../utilis/redis"
 import { generateShortCode } from "../utilis/shortCode"
 import type { Request, Response } from "express";
 
-const BASE_URL = process.env.URL;
+const BASE_URL = process.env.URL || "http://localhost:3000";
 
 export const createShortUrl = async(req: Request,res:Response) => {
     try {
-        const { originalUrl,customAlias,expiryDays=30} = req.body();
+        const { originalUrl,customAlias,expiryDays=30} = req.body;
         if (!originalUrl){
             return res.status(400).json({ error: "originalUrl required" });
         }
