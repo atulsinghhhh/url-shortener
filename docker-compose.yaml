@@ -1,7 +1,6 @@
 version: "3.9"
 
 services:
-
   redis:
     image: redis:alpine
     container_name: sniply-redis
@@ -15,8 +14,17 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
-
-
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: sniply-redisinsight
+    ports:
+      - "5540:5540"
+    volumes:
+      - redisinsight_data:/data
+    restart: always
+    depends_on:
+      redis:
+        condition: service_healthy
   backend:
     build: ./backend
     container_name: sniply-backend
@@ -28,8 +36,6 @@ services:
     depends_on:
       redis:
         condition: service_healthy
-
-
   frontend:
     build: ./frontend
     container_name: sniply-frontend
@@ -39,7 +45,6 @@ services:
     depends_on:
       backend:
         condition: service_started
-
-
 volumes:
   redis_data:
+  redisinsight_data:
