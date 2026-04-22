@@ -1,16 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { 
-  ArrowLeft, 
-  MousePointer2, 
-  Calendar, 
-  Copy, 
-  ExternalLink, 
-  RefreshCcw,
-  Clock,
-  Layout,
-  BarChart3 as BarChartIcon
-} from 'lucide-react';
+import { ArrowLeft,MousePointer2,Calendar,Copy,ExternalLink,RefreshCcw,Clock,Layout,BarChart3 as BarChartIcon } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import api from '../services/api';
 import type { StatsResponse, ClicksResponse } from '../types';
@@ -19,6 +9,11 @@ import AnalyticsDonutChart from '../components/DonutChart';
 import RecentClicks from '../components/RecentClicks';
 import MetricCard from '../components/MetricCard';
 
+interface ChartItem {
+  name: string;
+  value: number;
+}
+
 const Stats = () => {
   const { code } = useParams<{ code: string }>();
   const navigate = useNavigate();
@@ -26,26 +21,25 @@ const Stats = () => {
   const [clickData, setClickData] = useState<ClicksResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchData = async () => {
-    setIsLoading(true);
-    try {
-      const [statsRes, clicksRes] = await Promise.all([
-        api.get(`/api/v1/stats/${code}`),
-        api.get(`/api/v1/stats/${code}/clicks?limit=50`)
-      ]);
-      setStats(statsRes.data);
-      setClickData(clicksRes.data);
-    } catch (error) {
-      toast.error('Failed to load stats');
-      navigate('/dashboard');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [statsRes, clicksRes] = await Promise.all([
+          api.get(`/api/v1/stats/${code}`),
+          api.get(`/api/v1/stats/${code}/clicks?limit=50`)
+        ]);
+        setStats(statsRes.data);
+        setClickData(clicksRes.data);
+      } catch {
+        toast.error('Failed to load stats');
+        navigate('/dashboard');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     fetchData();
-  }, [code]);
+  }, [code, navigate]);
 
   if (isLoading || !stats) {
     return (
@@ -56,7 +50,7 @@ const Stats = () => {
   }
 
   // Prepare chart data
-  const chartData = (clickData?.clicks || []).reduce((acc: any[], click) => {
+  const chartData = (clickData?.clicks || []).reduce((acc: ChartItem[], click) => {
     const date = new Date(click.timestamp).toLocaleDateString();
     const existing = acc.find(item => item.name === date);
     if (existing) {
@@ -67,7 +61,7 @@ const Stats = () => {
     return acc;
   }, []).slice(-7); // Last 7 days
 
-  const deviceData = (clickData?.clicks || []).reduce((acc: any[], click) => {
+  const deviceData = (clickData?.clicks || []).reduce((acc: ChartItem[], click) => {
     const browser = click.userAgent.split('/')[0] || 'Other';
     const existing = acc.find(item => item.name === browser);
     if (existing) {

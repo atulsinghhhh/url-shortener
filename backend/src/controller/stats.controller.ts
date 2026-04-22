@@ -25,7 +25,7 @@ export const getStats = async (req: Request, res: Response) => {
     
         const clicks = (await redis.get(`clicks:${shortCode}`)) || "0";
     
-        const expiresAt = new Date(urlData?.expiresAt!);
+        const expiresAt = new Date(urlData.expiresAt || "");
     
         return res.json({
             success: true,

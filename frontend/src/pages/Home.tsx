@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import UrlInput from '../components/UrlInput';
 import ResultCard from '../components/ResultCard';
@@ -24,8 +25,11 @@ const Home = () => {
       setResult(data);
       addUrl(data);
       toast.success('URL shortened successfully!');
-    } catch (error: any) {
-      const message = error.response?.data?.message || 'Failed to shorten URL';
+    } catch (error) {
+      let message = 'Failed to shorten URL';
+      if (axios.isAxiosError(error) && error.response?.data?.message) {
+        message = error.response.data.message;
+      }
       toast.error(message);
     } finally {
       setIsLoading(false);
