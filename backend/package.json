@@ -11,7 +11,9 @@
   },
   "scripts": {
     "dev": "bun --watch src/index.ts",
-    "start": "bun src/index.ts"
+    "start": "bun src/index.ts",
+    "test": "bun test",
+    "lint": "eslint src/"
   },
   "peerDependencies": {
     "typescript": "^5"

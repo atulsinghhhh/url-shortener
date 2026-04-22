@@ -31,7 +31,7 @@ export const getStats = async (req: Request, res: Response) => {
             success: true,
             shortCode,
             originalUrl: urlData.originalUrl,
-            totalClicks: Number(clicks),
+            clickCount: Number(clicks),
             createdAt: urlData.createdAt,
             expiresAt,
             isExpired: Date.now() > expiresAt.getTime(),
@@ -41,3 +41,23 @@ export const getStats = async (req: Request, res: Response) => {
         res.status(500).json({ error: "Server error" });
     }
 };
+
+export const getClickDetails = async(req: Request,res: Response)=>{
+    try {
+        const { shortCode } = req.params;
+        const { limit = 50 } = req.query;
+
+        const logs = await redis.lRange(`clicklog:${shortCode}`, 0, Number(limit) - 1);
+        
+        const clicks = logs.map(log => JSON.parse(log));
+
+        return res.json({
+            success: true,
+            shortCode,
+            clicks,
+        });
+    } catch (error) {
+        console.log("error occuring due to: ",error);
+        res.status(500).json({ error: "Server error" });
+    }
+}
