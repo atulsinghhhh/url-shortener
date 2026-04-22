@@ -7,7 +7,9 @@ describe("cn utility", () => {
   });
 
   test("handles conditional classes", () => {
-    expect(cn("a", true && "b", false && "c")).toBe("a b");
+    const isTrue = true;
+    const isFalse = false;
+    expect(cn("a", isTrue && "b", isFalse && "c")).toBe("a b");
   });
 
   test("merges tailwind classes correctly", () => {
