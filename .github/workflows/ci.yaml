@@ -32,19 +32,19 @@ jobs:
           bun-version: latest
       
       - name: Install dependencies
-        working-directory: Backend
+        working-directory: backend
         run: bun install
       
       - name: Run linter
-        working-directory: Backend
+        working-directory: backend
         run: bun linter
 
       - name: Run tests
-        working-directory: Backend
+        working-directory: backend
         run: bun run lint
       
       - name: Run tests
-        working-directory: Backend
+        working-directory: backend
         run: bun test
         env:
           REDIS_URL: redis://localhost:6379
@@ -64,7 +64,7 @@ jobs:
           bun-version: latest
 
       - name: Install dependencies
-        working-directory: Frontend
+        working-directory: frontend
         run: bun install
 
       - name: Run linter
