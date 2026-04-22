@@ -34,8 +34,7 @@ const Dashboard = () => {
   }, [urls]);
 
   const filteredUrls = enrichedUrls.filter((url) => {
-    const matchesSearch = url.originalUrl.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                         url.shortCode.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = url.originalUrl.toLowerCase().includes(searchTerm.toLowerCase()) || url.shortCode.toLowerCase().includes(searchTerm.toLowerCase());
     
     const now = new Date();
     const expiresAt = new Date(url.expiresAt);

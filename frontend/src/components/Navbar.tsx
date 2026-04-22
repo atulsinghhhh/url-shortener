@@ -1,14 +1,18 @@
 
 import { Link, useLocation } from 'react-router-dom';
-import { Scissors, LayoutDashboard, Home } from 'lucide-react';
+import { Scissors, LayoutDashboard, Home, BarChart2 } from 'lucide-react';
 import { cn } from '../utils/cn';
 
 const Navbar = () => {
   const location = useLocation();
+  
+  const statsMatch = location.pathname.match(/^\/stats\/([^/]+)/);
+  const currentCode = statsMatch ? statsMatch[1] : null;
 
   const navLinks = [
     { name: 'Home', path: '/', icon: Home },
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+    ...(currentCode ? [{ name: 'Analytics', path: `/stats/${currentCode}`, icon: BarChart2 }] : []),
   ];
 
   return (
