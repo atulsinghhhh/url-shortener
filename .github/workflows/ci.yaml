@@ -37,10 +37,6 @@ jobs:
       
       - name: Run linter
         working-directory: backend
-        run: bun linter
-
-      - name: Run tests
-        working-directory: backend
         run: bun run lint
       
       - name: Run tests
@@ -71,9 +67,13 @@ jobs:
         working-directory: frontend
         run: bun run lint
 
+      - name: Run tests
+        working-directory: frontend
+        run: bun test
+
       - name: Build check
         working-directory: frontend
-        run: bun run Build
+        run: bun run build
   
   docker-build:
     name: Docker Build Check
