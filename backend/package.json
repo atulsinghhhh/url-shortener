@@ -13,7 +13,8 @@
     "dev": "bun --watch src/index.ts",
     "start": "bun src/index.ts",
     "test": "bun test",
-    "lint": "eslint src/"
+    "lint": "eslint src/",
+    "linter": "eslint ."
   },
   "peerDependencies": {
     "typescript": "^5"
