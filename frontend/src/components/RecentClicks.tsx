@@ -29,7 +29,14 @@ const RecentClicks: React.FC<RecentClicksProps> = ({ clicks }) => {
                   </span>
                   <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider font-bold text-slate-400">
                     <MapPin className="w-3 h-3" />
-                    {click.referer === 'direct' ? 'Direct' : new URL(click.referer).hostname}
+                    {(() => {
+                      if (!click.referer || click.referer === 'direct') return 'Direct';
+                      try {
+                        return new URL(click.referer).hostname;
+                      } catch {
+                        return click.referer;
+                      }
+                    })()}
                   </span>
                 </div>
               </div>
