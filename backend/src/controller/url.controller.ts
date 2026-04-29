@@ -69,11 +69,11 @@ export const redirectUrl = async(req: Request,res: Response)=>{
         await redis.incr(`clicks:${shortCode}`);
         await redis.lpush(
             `clicklog:${shortCode}`,
-            JSON.stringify({
+            {
                 timestamp: new Date(),
                 userAgent: req.headers["user-agent"],
                 referer: req.headers.referer,
-            })
+            }
         )
 
         return res.redirect(data.originalUrl);

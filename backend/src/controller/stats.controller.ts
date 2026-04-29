@@ -53,7 +53,16 @@ export const getClickDetails = async(req: Request,res: Response)=>{
 
         const logs = await redis.lrange<string>(`clicklog:${shortCode}`, 0, Number(limit) - 1);
         
-        const clicks = logs.map(log => JSON.parse(log));
+        const clicks = logs.map(log => {
+            if (typeof log === 'string') {
+                try {
+                    return JSON.parse(log);
+                } catch {
+                    return log;
+                }
+            }
+            return log; 
+        });
 
         return res.json({
             success: true,
