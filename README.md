@@ -2,13 +2,13 @@
 
 ![Sniply Banner](https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=1200&h=400)
 
-**Sniply** is a high-performance, full-stack URL shortening service designed with speed and aesthetics in mind. Built with a modern tech stack featuring React, Express, and Redis, it provides real-time analytics and a seamless user experience.
+**Sniply** is a high-performance, full-stack URL shortening service designed with speed and aesthetics in mind. Built with a modern tech stack featuring React, Express, and Upstash Redis, it provides real-time analytics and a seamless user experience.
 
 ---
 
 ## ✨ Key Features
 
-- 🚀 **Lightning Fast**: Powered by Redis for sub-millisecond lookups.
+- 🚀 **Lightning Fast**: Powered by Upstash Redis for sub-millisecond lookups.
 - 📊 **Real-time Analytics**: Track clicks, geographic data, browser statistics, and OS distributions.
 - 🖼️ **QR Code Generation**: Instantly generate QR codes for any shortened link.
 - 🎨 **Premium UI**: Crafted with React 19, Tailwind CSS 4, and Framer Motion for a fluid, modern feel.
@@ -31,7 +31,7 @@
 - **Runtime**: Bun / Node.js
 - **Framework**: Express 5
 - **Language**: TypeScript
-- **Database**: Redis (Primary storage & analytics)
+- **Database**: Upstash Redis (Serverless HTTP SDK)
 
 ### DevOps
 - **Containerization**: Docker & Docker Compose
@@ -61,7 +61,7 @@
    ```
 
 3. **Live Demo:**
-   - **Frontend (Vercel)**: [https://url-shortener-rho-pied.vercel.app/](https://url-shortener-rho-pied.vercel.app/)
+   - **Frontend (Official)**: [https://frontend-six-peach-98.vercel.app/](https://frontend-six-peach-98.vercel.app/)
    - **Backend API (Render)**: [https://url-shortener-backend-2i00.onrender.com/](https://url-shortener-backend-2i00.onrender.com/)
 
 ---
