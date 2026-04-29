@@ -18,8 +18,8 @@ export const getStats = async (req: Request, res: Response) => {
     try {
         const { shortCode } = req.params;
     
-        const urlData = await redis.hGetAll(`url:${shortCode}`);
-        if (!urlData.originalUrl){
+        const urlData = await redis.hgetall<any>(`url:${shortCode}`);
+        if (!urlData || !urlData.originalUrl){
             return res.status(404).json({ error: "Not found" });
         }
     
@@ -27,9 +27,12 @@ export const getStats = async (req: Request, res: Response) => {
     
         const expiresAt = new Date(urlData.expiresAt || "");
     
+        const baseUrl = process.env.URL || `${req.protocol}://${req.get('host')}`;
+    
         return res.json({
             success: true,
             shortCode,
+            shortUrl: `${baseUrl}/${shortCode}`,
             originalUrl: urlData.originalUrl,
             clickCount: Number(clicks),
             createdAt: urlData.createdAt,
@@ -47,7 +50,7 @@ export const getClickDetails = async(req: Request,res: Response)=>{
         const { shortCode } = req.params;
         const { limit = 50 } = req.query;
 
-        const logs = await redis.lRange(`clicklog:${shortCode}`, 0, Number(limit) - 1);
+        const logs = await redis.lrange<string>(`clicklog:${shortCode}`, 0, Number(limit) - 1);
         
         const clicks = logs.map(log => JSON.parse(log));
 

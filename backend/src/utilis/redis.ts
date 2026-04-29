@@ -1,19 +1,19 @@
-import { createClient } from "redis"
+import { Redis } from "@upstash/redis";
 
-export const redis = createClient({
-    url: process.env.REDIS_URL || "redis://redis:6379",
+export const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL!,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
 });
 
-redis.on("error",(error)=>{
-    console.error("Redis Error: ",error);
-})
-
-export async function connectRedis(){
-    await redis.connect();
-    console.log("Redis Connected to:", process.env.REDIS_URL || "redis://redis:6379");
+export async function connectRedis() {
+  try {
+    // Upstash HTTP client doesn't need a persistent connection, 
+    // but we can verify it by doing a simple ping.
+    const pong = await redis.ping();
+    if (pong === "PONG") {
+      console.log("🚀 Upstash Redis connected successfully");
+    }
+  } catch (error) {
+    console.error("❌ Upstash Redis connection error:", error);
+  }
 }
-
-/*
-    time="2026-04-21T13:53:13+05:30" level=warning msg="C:\\Users\\Atul_Rathore\\chaiorlearn\\urlshortener\\docker-compose.yaml: 
-    the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
-*/

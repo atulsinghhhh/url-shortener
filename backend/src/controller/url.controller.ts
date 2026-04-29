@@ -2,11 +2,12 @@ import { redis } from "../utilis/redis"
 import { generateShortCode } from "../utilis/shortCode"
 import type { Request, Response } from "express";
 
-const BASE_URL = process.env.URL || "http://localhost:3000";
-
 export const createShortUrl = async(req: Request,res:Response) => {
     try {
         const { originalUrl,customAlias,expiryDays=30} = req.body;
+        
+        // Use environment variable URL or fall back to request host
+        const baseUrl = process.env.URL || `${req.protocol}://${req.get('host')}`;
         if (!originalUrl){
             return res.status(400).json({ error: "originalUrl required" });
         }
@@ -20,8 +21,8 @@ export const createShortUrl = async(req: Request,res:Response) => {
 
         const shortCode = customAlias || generateShortCode();
 
-        const exists=await redis.exists(`url:${shortCode}`);
-        if(exists){
+        const exists = await redis.exists(`url:${shortCode}`);
+        if (exists === 1) {
             return res.status(400).json({ error: "Alias already exists" });
         }
 
@@ -30,7 +31,7 @@ export const createShortUrl = async(req: Request,res:Response) => {
             Date.now() + expiryDays * 24 * 60 * 60 * 1000
         );
 
-        await redis.hSet(`url:${shortCode}`,{
+        await redis.hset(`url:${shortCode}`, {
             originalUrl,
             createdAt: createdAt.toISOString(),
             expiresAt: expiresAt.toISOString(),
@@ -44,7 +45,7 @@ export const createShortUrl = async(req: Request,res:Response) => {
         return res.status(201).json({
             success: true,
             shortCode,
-            shortUrl: `${BASE_URL}/${shortCode}`,
+            shortUrl: `${baseUrl}/${shortCode}`,
             originalUrl,
             expiresAt,
             createdAt,
@@ -58,14 +59,14 @@ export const createShortUrl = async(req: Request,res:Response) => {
 
 export const redirectUrl = async(req: Request,res: Response)=>{
     try {
-        const { shortCode }= req.params;
-        const data=await redis.hGetAll(`url:${shortCode}`);
+        const { shortCode } = req.params;
+        const data = await redis.hgetall<any>(`url:${shortCode}`);
 
-        if(!data.originalUrl){
+        if (!data || !data.originalUrl) {
             return res.status(404).json({ error: "URL not found" });
         }
         await redis.incr(`clicks:${shortCode}`);
-        await redis.lPush(
+        await redis.lpush(
             `clicklog:${shortCode}`,
             JSON.stringify({
                 timestamp: new Date(),
