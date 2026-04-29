@@ -10,6 +10,7 @@ export interface UrlResponse {
 
 export interface StatsResponse {
   shortCode: string;
+  shortUrl: string;
   originalUrl: string;
   clickCount: number;
   expiresAt: string;

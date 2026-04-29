@@ -94,12 +94,12 @@ const Stats = () => {
                   <span className="font-bold text-primary truncate max-w-[180px]">{code}</span>
                   <div className="flex gap-1">
                     <button onClick={() => {
-                       navigator.clipboard.writeText(`${window.location.origin.replace('5173', '3000')}/${code}`);
+                       navigator.clipboard.writeText(stats.shortUrl);
                        toast.success('Copied!');
                     }} className="p-1.5 hover:bg-white rounded-lg text-slate-400 hover:text-primary transition-all">
                       <Copy className="w-4 h-4" />
                     </button>
-                    <a href={`http://localhost:3000/${code}`} target="_blank" rel="noreferrer" className="p-1.5 hover:bg-white rounded-lg text-slate-400 hover:text-primary transition-all">
+                    <a href={stats.shortUrl} target="_blank" rel="noreferrer" className="p-1.5 hover:bg-white rounded-lg text-slate-400 hover:text-primary transition-all">
                       <ExternalLink className="w-4 h-4" />
                     </a>
                   </div>
