@@ -1,5 +1,6 @@
 import { redis } from "../utilis/redis"
 import type { Request, Response } from "express";
+import type { RedisUrlData } from "../types";
 
 
 
@@ -18,7 +19,7 @@ export const getStats = async (req: Request, res: Response) => {
     try {
         const { shortCode } = req.params;
     
-        const urlData = await redis.hgetall<any>(`url:${shortCode}`);
+        const urlData = await redis.hgetall<RedisUrlData>(`url:${shortCode}`);
         if (!urlData || !urlData.originalUrl){
             return res.status(404).json({ error: "Not found" });
         }

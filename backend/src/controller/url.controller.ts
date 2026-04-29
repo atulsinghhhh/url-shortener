@@ -1,6 +1,7 @@
 import { redis } from "../utilis/redis"
 import { generateShortCode } from "../utilis/shortCode"
 import type { Request, Response } from "express";
+import type { RedisUrlData } from "../types";
 
 export const createShortUrl = async(req: Request,res:Response) => {
     try {
@@ -60,7 +61,7 @@ export const createShortUrl = async(req: Request,res:Response) => {
 export const redirectUrl = async(req: Request,res: Response)=>{
     try {
         const { shortCode } = req.params;
-        const data = await redis.hgetall<any>(`url:${shortCode}`);
+        const data = await redis.hgetall<RedisUrlData>(`url:${shortCode}`);
 
         if (!data || !data.originalUrl) {
             return res.status(404).json({ error: "URL not found" });
