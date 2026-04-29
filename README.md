@@ -60,10 +60,9 @@
    docker-compose up -d --build
    ```
 
-3. **Access the application:**
-   - **Frontend**: [http://localhost:5173](http://localhost:5173)
-   - **Backend API**: [http://localhost:3000](http://localhost:3000)
-   - **Redis Insight**: [http://localhost:5540](http://localhost:5540) (To visualize your data)
+3. **Live Demo:**
+   - **Frontend (Vercel)**: [https://url-shortener-rho-pied.vercel.app/](https://url-shortener-rho-pied.vercel.app/)
+   - **Backend API (Render)**: [https://url-shortener-backend-2i00.onrender.com/](https://url-shortener-backend-2i00.onrender.com/)
 
 ---
 
